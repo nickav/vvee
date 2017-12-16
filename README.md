@@ -1,7 +1,8 @@
-vee
+vvvv
 ========================================
+Dead simple object schema parsing.
 
-`{}` -> `{}`
+`{}, {}` -> `{}`
 
 ## Install
 
@@ -10,11 +11,12 @@ yarn add vee
 ```
 
 ```javascript
-const vee = require('vee')
+const vvvv = require('vvvv')
+const v = vvvv() // use default schema
 
-const schema = {
+const definition = {
   x: Number,
-  y: 'default value', // string
+  y: 'default value',
   numbers: [ Number ],
   arrays: [ [] ]
 }
@@ -25,8 +27,7 @@ const data = {
   numbers: [ false ]
 }
 
-console.log(vee(data, schema))
-/* prints:
+console.log(v(data, schema)) /* prints:
 {
   x: 1,
   y: '0',

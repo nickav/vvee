@@ -1,5 +1,5 @@
 {
-  "name": "vee",
+  "name": "vvvv",
   "version": "0.0.1",
   "description": "Dead simple object schema validation",
   "main": "./lib",
@@ -18,12 +18,10 @@
     "*.{js,jsx,json,scss}": ["yarn f", "git add"]
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "husky": "^0.14.3",
     "lint-staged": "^4.3.0",
     "mocha": "^4.0.1",
     "prettier": "^1.8.1"
-  },
-  "dependencies": {
-    "chai": "^4.1.2"
   }
 }
