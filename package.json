@@ -1,0 +1,32 @@
+{
+  "name": "vee",
+  "version": "0.0.1",
+  "description": "Dead simple object schema validation",
+  "main": "./lib",
+  "repository": "https://github.com/nickaversano/vee",
+  "author": "Nick Aversano",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "format": "yarn f $(git ls-files -c -m | grep '\\.\\(jsx\\?\\|json\\|scss\\)$' | tr '\n' ' ')",
+    "f": "node_modules/.bin/prettier --config .prettierrc --write",
+    "test": "mocha",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,json,scss}": [
+      "yarn f",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "lint-staged": "^4.3.0",
+    "mocha": "^4.0.1",
+    "prettier": "^1.8.1"
+  },
+  "dependencies": {
+    "chai": "^4.1.2",
+    "hibar": "^0.1.1"
+  }
+}
