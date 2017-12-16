@@ -1,4 +1,5 @@
 const vvee = require('../lib')
+const t = vvee.types
 const vee = vvee()
 const { expect } = require('chai')
 
@@ -8,14 +9,15 @@ describe('vvee', () => {
       expect(vee('1', 1)).to.eq(1)
       expect(vee(1, 1)).to.eq(1)
       expect(vee(1, 0)).to.eq(1)
-      expect(vee('', Number)).to.eq(0)
+      expect(vee('', t.Number)).to.eq(0)
+      expect(vee({}, { a: t.Number, b: 120 })).to.deep.eq({ a: 0, b: 120 })
     })
 
     it('string', () => {
       expect(vee('1', '1')).to.eq('1')
       expect(vee(1, '1')).to.eq('1')
       expect(vee(0, '1')).to.eq('0')
-      expect(vee(undefined, String)).to.eq('undefined')
+      expect(vee(undefined, t.String)).to.eq('undefined')
     })
 
     it('boolean', () => {
@@ -77,6 +79,12 @@ describe('vvee', () => {
       expect(vee(undefined, {})).to.deep.eq({})
       expect(vee(false, {})).to.deep.eq({})
       expect(vee('', {})).to.deep.eq({})
+    })
+
+    it('missing', () => {
+      const extra = { foo: 'bar' }
+      expect(vee(extra, {})).to.deep.eq(extra)
+      expect(vee({}, extra)).to.deep.eq(extra)
     })
   })
 })

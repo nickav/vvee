@@ -1,23 +1,24 @@
-vvvv
+vvee
 ========================================
-Dead simple object schema parsing.
+Dead-simple object schema parsing.
 
 `{}, {}` -> `{}`
 
 ## Install
 
 ```bash
-yarn add vee
+yarn add vvee
 ```
 
 ```javascript
-const vvvv = require('vvvv')
-const v = vvvv() // use default schema
+const vvee = require('vvee')
+const t = vvee.types
+const v = vvee() // use default schema
 
 const definition = {
-  x: Number,
+  x: t.Number,
   y: 'default value',
-  numbers: [ Number ],
+  numbers: [ t.Number ],
   arrays: [ [] ]
 }
 
