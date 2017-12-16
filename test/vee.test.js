@@ -1,4 +1,4 @@
-const vee = require('../lib')
+const vee = require('../lib')()
 const { expect } = require('chai')
 
 describe('vee', () => {
@@ -23,7 +23,7 @@ describe('vee', () => {
     })
 
     it('function', () => {
-      expect(vee(1, x => (x + 100))).to.eq(101)
+      expect(vee(1, x => x + 100)).to.eq(101)
       expect(vee({ a: 0 }, { a: x => 10 })).to.deep.eq({ a: 10 })
       expect(vee(undefined, x => 'hey')).to.eq('hey')
     })
@@ -37,9 +37,9 @@ describe('vee', () => {
     })
 
     it('nested', () => {
-      expect(vee(1, [ [0] ])).to.deep.eq([[1]])
-      expect(vee([0], [ [0] ])).to.deep.eq([[0]])
-      expect(vee([], [ [0] ])).to.deep.eq([])
+      expect(vee(1, [[0]])).to.deep.eq([[1]])
+      expect(vee([0], [[0]])).to.deep.eq([[0]])
+      expect(vee([], [[0]])).to.deep.eq([])
     })
 
     it('coerces each value in the array', () => {

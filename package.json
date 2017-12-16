@@ -8,16 +8,14 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "format": "yarn f $(git ls-files -c -m | grep '\\.\\(jsx\\?\\|json\\|scss\\)$' | tr '\n' ' ')",
+    "format":
+      "yarn f $(git ls-files -c -m | grep '\\.\\(jsx\\?\\|json\\|scss\\)$' | tr '\n' ' ')",
     "f": "node_modules/.bin/prettier --config .prettierrc --write",
     "test": "mocha",
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,jsx,json,scss}": [
-      "yarn f",
-      "git add"
-    ]
+    "*.{js,jsx,json,scss}": ["yarn f", "git add"]
   },
   "devDependencies": {
     "husky": "^0.14.3",
@@ -26,7 +24,6 @@
     "prettier": "^1.8.1"
   },
   "dependencies": {
-    "chai": "^4.1.2",
-    "hibar": "^0.1.1"
+    "chai": "^4.1.2"
   }
 }
