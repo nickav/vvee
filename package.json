@@ -1,9 +1,9 @@
 {
-  "name": "vvvv",
+  "name": "vvee",
   "version": "0.0.1",
   "description": "Dead simple object schema validation",
   "main": "./lib",
-  "repository": "https://github.com/nickaversano/vee",
+  "repository": "https://github.com/nickaversano/vvee",
   "author": "Nick Aversano",
   "license": "MIT",
   "private": false,

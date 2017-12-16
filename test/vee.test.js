@@ -1,7 +1,8 @@
-const vee = require('../lib')()
+const vvee = require('../lib')
+const vee = vvee()
 const { expect } = require('chai')
 
-describe('vee', () => {
+describe('vvee', () => {
   describe('primitive types', () => {
     it('number', () => {
       expect(vee('1', 1)).to.eq(1)
@@ -14,6 +15,7 @@ describe('vee', () => {
       expect(vee('1', '1')).to.eq('1')
       expect(vee(1, '1')).to.eq('1')
       expect(vee(0, '1')).to.eq('0')
+      expect(vee(undefined, String)).to.eq('undefined')
     })
 
     it('boolean', () => {
@@ -70,7 +72,7 @@ describe('vee', () => {
     })
 
     it('simple', () => {
-      expect(vee(0, { a: 10 })).to.deep.eq({ a: 10 })
+      expect(vee(0, { a: Number })).to.deep.eq({ a: 0 })
       expect(vee({}, { a: 1 })).to.deep.eq({ a: 1 })
       expect(vee(undefined, {})).to.deep.eq({})
       expect(vee(false, {})).to.deep.eq({})
