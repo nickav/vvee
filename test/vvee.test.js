@@ -6,24 +6,22 @@ const { expect } = require('chai')
 describe('vvee', () => {
   describe('primitive types', () => {
     it('number', () => {
-      expect(vee('1', 1)).to.eq(1)
-      expect(vee(1, 1)).to.eq(1)
-      expect(vee(1, 0)).to.eq(1)
+      expect(vee('1', t.Number)).to.eq(1)
+      expect(vee(1, t.Number)).to.eq(1)
       expect(vee('', t.Number)).to.eq(0)
-      expect(vee({}, { a: t.Number, b: 120 })).to.deep.eq({ a: 0, b: 120 })
+      expect(vee(Infinity, t.Number)).to.eq(Infinity)
     })
 
     it('string', () => {
-      expect(vee('1', '1')).to.eq('1')
-      expect(vee(1, '1')).to.eq('1')
-      expect(vee(0, '1')).to.eq('0')
-      expect(vee(undefined, t.String)).to.eq('undefined')
+      expect(vee('1', t.String)).to.eq('1')
+      expect(vee(0, t.String)).to.eq('0')
+      expect(vee(undefined, t.String)).to.eq('')
     })
 
     it('boolean', () => {
-      expect(vee('', true)).to.eq(false)
-      expect(vee(1, true)).to.eq(true)
-      expect(vee(0, false)).to.eq(false)
+      expect(vee('', t.Boolean)).to.eq(false)
+      expect(vee(1, t.Boolean)).to.eq(true)
+      expect(vee(0, t.Boolean)).to.eq(false)
     })
 
     it('function', () => {
@@ -34,61 +32,73 @@ describe('vvee', () => {
   })
 
   describe('array', () => {
-    it('simple', () => {
-      expect(vee(0, [])).to.deep.eq([0])
+    it('coerces to truthy array', () => {
+      expect(vee(0, [])).to.deep.eq([])
+      expect(vee(1, [])).to.deep.eq([1])
       expect(vee([], [])).to.deep.eq([])
       expect(vee(undefined, [])).to.deep.eq([])
     })
 
     it('nested', () => {
-      expect(vee(1, [[0]])).to.deep.eq([[1]])
-      expect(vee([0], [[0]])).to.deep.eq([[0]])
-      expect(vee([], [[0]])).to.deep.eq([])
+      expect(vee(1, [[t.Number]])).to.deep.eq([[1]])
+      expect(vee([0], [[t.Number]])).to.deep.eq([[]])
+      expect(vee([[0]], [[t.Number]])).to.deep.eq([[0]])
     })
 
     it('coerces each value in the array', () => {
-      expect(vee([1, 2, 3], ['1'])).to.deep.eq(['1', '2', '3'])
-      expect(vee(['1', '2', '3'], [1])).to.deep.eq([1, 2, 3])
+      expect(vee([1, 2, 3], [t.String])).to.deep.eq(['1', '2', '3'])
+      expect(vee(['1', '2', '3'], [t.Number])).to.deep.eq([1, 2, 3])
     })
 
     it('wraps around', () => {
-      expect(vee([1, 2, 1, 2], [Number, String])).to.deep.eq([1, '2', 1, '2'])
+      const given = [2, 2, 1, 1]
+      const expected = [2, '2', 1, '1']
+      expect(vee(given, [t.Number, t.String])).to.deep.eq(expected)
     })
   })
 
   describe('object', () => {
     it('kitchen sink', () => {
-      const definition = {
-        string: 'Hello, sir',
-        number: t.Number,
-        boolean: false,
-        array: [1],
+      const def = {
+        string: t.OneOf('a', 'b'),
+        number: x => 0,
+        boolean: t.compose(t.Maybe(t.Boolean), t.Default(true)),
+        array: [x => x * x],
         object: {
-          string: '',
-          number: 10
+          string: t.compose(t.String, t.Default('stringy')),
+          number: t.compose(t.Number, x => x + 10, t.Default(0))
         }
       }
 
       const data = {
-        string: undefined,
+        string: 'a',
         number: -1,
-        boolean: 0
+        boolean: null
       }
-      expect(vee(data, definition)).to.deep.eq(definition)
+
+      const expected = {
+        string: 'a',
+        number: 0,
+        boolean: null,
+        array: [],
+        object: { string: 'stringy', number: 10 }
+      }
+
+      const result = vee(data, def)
+      expect(result).to.deep.eq(expected)
     })
 
-    it('simple', () => {
-      expect(vee(0, { a: Number })).to.deep.eq({ a: 0 })
-      expect(vee({}, { a: 1 })).to.deep.eq({ a: 1 })
+    it('when type mismatch', () => {
+      expect(vee(0, { a: t.Number })).to.deep.eq({ a: 0 })
       expect(vee(undefined, {})).to.deep.eq({})
       expect(vee(false, {})).to.deep.eq({})
       expect(vee('', {})).to.deep.eq({})
     })
 
-    it('missing', () => {
+    it('when missing', () => {
       const extra = { foo: 'bar' }
       expect(vee(extra, {})).to.deep.eq(extra)
-      expect(vee({}, extra)).to.deep.eq(extra)
+      expect(vee({}, { foo: t.String })).to.deep.eq({ foo: '' })
     })
   })
 })

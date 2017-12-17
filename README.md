@@ -2,41 +2,51 @@ vvee
 ========================================
 Dead-simple object schema parsing.
 
-`{}, {}` -> `{}`
+`vvee()({}, {})` -> `{}`
 
 ## Install
 
+[Install yarn][yarn-install]. Then:
 ```bash
 yarn add vvee
 ```
 
+## Example
+
 ```javascript
 const vvee = require('vvee')
-const t = vvee.types
-const v = vvee() // use default schema
+const { types: t } = vvee
 
-const definition = {
-  x: t.Number,
-  y: 'default value',
-  numbers: [ t.Number ],
-  arrays: [ [] ]
+const def = {
+  string: t.OneOf('a', 'b'),
+  number: x => 0,
+  boolean: t.compose(t.Maybe(t.Boolean), t.Default(true)),
+  array: [x => x * x],
+  object: {
+    string: t.compose(t.String, t.Default('stringy')),
+    number: t.compose(t.Number, x => x + 10, t.Default(0))
+  }
 }
 
 const data = {
-  x: '1',
-  y: 0,
-  numbers: [ false ]
+  string: 'a',
+  number: -1,
+  boolean: null
 }
 
-console.log(v(data, schema)) /* prints:
-{
-  x: 1,
-  y: '0',
-  numbers: [ 0 ],
-  arrays: [ [] ]
-}
-*/
+const result = vvee()(data, def)
+console.log(result)
 ```
+
+## API
+
+`vvee(schema: Object?)` - Creates a new parser with the given schema, or just
+use the defaults. You can override all behavior by providing your own
+[custom schema](/lib/index.js#L9). This returns:
+
+`vee(data: Object, definition: Object)` - Given data and a type definition,
+parses data returning a new object.
+
 
 ### Development
 
