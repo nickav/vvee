@@ -55,6 +55,12 @@ describe('vvee', () => {
       const expected = [2, '2', 1, '1']
       expect(vee(given, [t.Number, t.String])).to.deep.eq(expected)
     })
+
+    it('2d arrays', () => {
+      const test = [['1', '2'], ['3', '4']]
+      const expected = [[1, 2], [3, 4]]
+      expect(vee(test, [[t.Number]])).to.deep.eq(expected)
+    })
   })
 
   describe('object', () => {
