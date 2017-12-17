@@ -60,7 +60,7 @@ describe('vvee', () => {
     it('kitchen sink', () => {
       const definition = {
         string: 'Hello, sir',
-        number: 800,
+        number: t.Number,
         boolean: false,
         array: [1],
         object: {
@@ -69,7 +69,11 @@ describe('vvee', () => {
         }
       }
 
-      const data = {}
+      const data = {
+        string: undefined,
+        number: -1,
+        boolean: 0
+      }
       expect(vee(data, definition)).to.deep.eq(definition)
     })
 
