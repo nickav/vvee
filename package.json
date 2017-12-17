@@ -1,6 +1,6 @@
 {
   "name": "vvee",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Dead-simple object schema validation",
   "main": "./lib",
   "repository": "https://github.com/nickaversano/vvee",
