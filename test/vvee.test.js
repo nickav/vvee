@@ -22,6 +22,10 @@ describe('vvee', () => {
       expect(vee('', t.Boolean)).to.eq(false)
       expect(vee(1, t.Boolean)).to.eq(true)
       expect(vee(0, t.Boolean)).to.eq(false)
+      expect(vee('true', t.Boolean)).to.eq(true)
+      expect(vee('1', t.Boolean)).to.eq(true)
+      expect(vee('false', t.Boolean)).to.eq(false)
+      expect(vee('0', t.Boolean)).to.eq(false)
     })
 
     it('function', () => {
